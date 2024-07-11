@@ -69,7 +69,7 @@ static int bvd_sample_fetch(const struct device *dev, enum sensor_channel chan) 
     as->calibrate = false;
 
     if (rc == 0) {
-#if (CONFIG_ADC==0)
+#if (CONFIG_ADC == 0)
         int32_t val = drv_data->value.adc_raw;
 
         adc_raw_to_millivolts(adc_ref_internal(drv_data->adc), drv_data->acc.gain, as->resolution,
@@ -79,10 +79,11 @@ static int bvd_sample_fetch(const struct device *dev, enum sensor_channel chan) 
         LOG_DBG("ADC raw %d ~ %d mV => %d mV", drv_data->value.adc_raw, val, millivolts);
         uint8_t percent = lithium_ion_mv_to_pct(millivolts);
         LOG_DBG("Percent: %d", percent);
-#elif (CONFIG_ADC==1)
-    uint16_t millivolts = ((uint16_t *)(as->buffer))[0];
-    uint8_t percent = lithium_ion_mv_to_pct_rtk(millivolts);
-    DBG_DIRECT("battery voltage %d(mv) %d(percent) %d(channel)",millivolts,percent,drv_cfg->io_channel.channel);
+#elif (CONFIG_ADC == 1)
+        uint16_t millivolts = ((uint16_t *)(as->buffer))[0];
+        uint8_t percent = lithium_ion_mv_to_pct_rtk(millivolts);
+        DBG_DIRECT("battery voltage %d(mv) %d(percent) %d(channel)", millivolts, percent,
+                   drv_cfg->io_channel.channel);
 #endif
 
         drv_data->value.millivolts = millivolts;
@@ -162,7 +163,7 @@ static int bvd_init(const struct device *dev) {
         .gain = ADC_GAIN_1,
         .reference = ADC_REF_INTERNAL,
         .acquisition_time = ADC_ACQ_TIME_DEFAULT,
-        .differential=0,
+        .differential = 0,
     };
     drv_data->as.resolution = 12;
 #else

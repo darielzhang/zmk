@@ -38,24 +38,19 @@ static uint8_t key_press_num = 0;
 #include "trace.h"
 static void zmk_kscan_callback(const struct device *dev, uint32_t row, uint32_t column,
                                bool pressed) {
-    LOG_DBG("keyscan callback: row,col is (%d %d)",row,column);
-    /* cpu will check dlps status modules by modules in idle task, in this case interrupt is disabled
-       when the scan interval of keyscan is set <100us, it may result in unstable interrupt intervals
-       in this case we can skip check before wfi/dlps
+    LOG_DBG("keyscan callback: row,col is (%d %d)", row, column);
+    /* cpu will check dlps status modules by modules in idle task, in this case interrupt is
+       disabled when the scan interval of keyscan is set <100us, it may result in unstable interrupt
+       intervals in this case we can skip check before wfi/dlps
      */
-    if(pressed)
-    {
+    if (pressed) {
         key_press_num++;
-        if(app_mode.is_in_usb_mode)
-        {
+        if (app_mode.is_in_usb_mode) {
             pm_no_check_status_before_enter_wfi();
         }
-    }
-    else
-    {
+    } else {
         key_press_num--;
-        if(key_press_num == 0)
-        {
+        if (key_press_num == 0) {
             pm_check_status_before_enter_wfi_or_dlps();
         }
     }
@@ -82,7 +77,7 @@ void zmk_kscan_process_msgq(struct k_work *item) {
         }
 
         LOG_DBG("Row: %d, col: %d, position: %d, pressed: %s", ev.row, ev.column, position,
-                (pressed ? "true" : "false"));      
+                (pressed ? "true" : "false"));
         raise_zmk_position_state_changed(
             (struct zmk_position_state_changed){.source = ZMK_POSITION_STATE_CHANGE_SOURCE_LOCAL,
                                                 .state = pressed,

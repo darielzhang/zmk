@@ -21,31 +21,26 @@ static void app_wdt_timeout_cb(struct k_timer *timer);
 static K_TIMER_DEFINE(app_wdt_timer, app_wdt_timeout_cb, NULL);
 const struct device *const wdt = DEVICE_DT_GET(DT_ALIAS(watchdog));
 
-
-void app_system_reset(uint8_t flag)
-{
+void app_system_reset(uint8_t flag) {
     struct wdt_timeout_cfg wdt_config = {
         .flags = flag,
-        .window.max = 0, //set window.max to 0: reboot immediately
+        .window.max = 0, // set window.max to 0: reboot immediately
     };
-    wdt_install_timeout(wdt,&wdt_config);
+    wdt_install_timeout(wdt, &wdt_config);
 }
 
-static int app_wdt_init(void)
-{
-    if(!device_is_ready(wdt))
-    {
-        LOG_DBG("%s:device not ready",wdt->name);
+static int app_wdt_init(void) {
+    if (!device_is_ready(wdt)) {
+        LOG_DBG("%s:device not ready", wdt->name);
         return 1;
     }
-    k_timer_start(&app_wdt_timer, K_MSEC(4000),K_MSEC(4000));
+    k_timer_start(&app_wdt_timer, K_MSEC(4000), K_MSEC(4000));
     return 0;
 }
 
-static void app_wdt_timeout_cb(struct k_timer *timer)
-{
-    //DBG_DIRECT("watchdog feed");
-    wdt_feed(wdt,0);
+static void app_wdt_timeout_cb(struct k_timer *timer) {
+    // DBG_DIRECT("watchdog feed");
+    wdt_feed(wdt, 0);
     return;
 }
 

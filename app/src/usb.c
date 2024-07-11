@@ -22,7 +22,8 @@
 
 LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 
-static struct gpio_dt_spec detect_usb = GPIO_DT_SPEC_GET(DT_NODELABEL(mode_monitor), detect_usb_gpios);
+static struct gpio_dt_spec detect_usb =
+    GPIO_DT_SPEC_GET(DT_NODELABEL(mode_monitor), detect_usb_gpios);
 
 static enum usb_dc_status_code usb_status = USB_DC_UNKNOWN;
 
@@ -57,8 +58,8 @@ enum zmk_usb_conn_state zmk_usb_get_conn_state(void) {
 void usb_status_cb(enum usb_dc_status_code status, const uint8_t *params) {
     // Start-of-frame events are too frequent and noisy to notify, and they're
     // not used within ZMK
-    LOG_DBG("usb status cb: usb status is %d",status);
-     DBG_DIRECT("usb status cb: usb status is %d",status);
+    LOG_DBG("usb status cb: usb status is %d", status);
+    DBG_DIRECT("usb status cb: usb status is %d", status);
     if (status == USB_DC_SOF) {
         return;
     }
@@ -69,8 +70,7 @@ void usb_status_cb(enum usb_dc_status_code status, const uint8_t *params) {
     }
 #endif
     usb_status = status;
-    if(status == USB_DC_CONFIGURED)
-    {
+    if (status == USB_DC_CONFIGURED) {
         app_global_data.is_usb_enumeration_success = true;
     }
     k_work_submit(&usb_status_notifier_work);
@@ -81,27 +81,24 @@ int zmk_usb_init(void) {
     int usb_disable_ret;
 
     usb_enable_ret = usb_enable(usb_status_cb);
-    if(!gpio_pin_get_raw(detect_usb.port, detect_usb.pin))
-    {
+    if (!gpio_pin_get_raw(detect_usb.port, detect_usb.pin)) {
         LOG_DBG("usb is not insert");
         usb_disable_ret = usb_disable();
-        if(usb_disable_ret != 0)
-        {
-            LOG_ERR("Unable to disable usb ,err = %d",usb_disable_ret);
+        if (usb_disable_ret != 0) {
+            LOG_ERR("Unable to disable usb ,err = %d", usb_disable_ret);
             return -EINVAL;
         }
     }
 
     if (usb_enable_ret != 0) {
-        LOG_ERR("Unable to enable USB ,err = %d",usb_enable_ret);
+        LOG_ERR("Unable to enable USB ,err = %d", usb_enable_ret);
         app_mode.is_in_usb_mode = false;
         return -EINVAL;
     }
 
     return 0;
 }
-int zmk_usb_deinit(void)
-{
+int zmk_usb_deinit(void) {
     int usb_enable_ret;
 
     usb_enable_ret = usb_disable();

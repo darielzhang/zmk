@@ -44,14 +44,13 @@ int main(void) {
     if (zmk_kscan_init(DEVICE_DT_GET(ZMK_MATRIX_NODE_ID)) != 0) {
         return -ENOTSUP;
     }
-    DBG_DIRECT("app global mode usb %d ppt%d ble%d",app_mode.is_in_usb_mode, app_mode.is_in_ppt_mode,app_mode.is_in_bt_mode);
-    if(app_mode.is_in_bt_mode && !app_mode.is_in_usb_mode)
-    {
+    DBG_DIRECT("app global mode usb %d ppt%d ble%d", app_mode.is_in_usb_mode,
+               app_mode.is_in_ppt_mode, app_mode.is_in_bt_mode);
+    if (app_mode.is_in_bt_mode && !app_mode.is_in_usb_mode) {
         zmk_ble_init();
     }
 #if IS_ENABLED(CONFIG_ZMK_PPT)
-    if(app_mode.is_in_ppt_mode && !app_mode.is_in_usb_mode)
-    {
+    if (app_mode.is_in_ppt_mode && !app_mode.is_in_usb_mode) {
         zmk_ppt_init();
     }
 #endif

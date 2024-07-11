@@ -63,8 +63,9 @@ enum advertising_type {
 #define CURR_ADV(adv) (adv << 4)
 
 #define ZMK_ADV_CONN_NAME                                                                          \
-    BT_LE_ADV_PARAM(BT_LE_ADV_OPT_CONNECTABLE | BT_LE_ADV_OPT_ONE_TIME | BT_LE_ADV_OPT_USE_IDENTITY, BT_GAP_ADV_FAST_INT_MIN_2, \
-                    BT_GAP_ADV_FAST_INT_MAX_2, NULL)
+    BT_LE_ADV_PARAM(BT_LE_ADV_OPT_CONNECTABLE | BT_LE_ADV_OPT_ONE_TIME |                           \
+                        BT_LE_ADV_OPT_USE_IDENTITY,                                                \
+                    BT_GAP_ADV_FAST_INT_MIN_2, BT_GAP_ADV_FAST_INT_MAX_2, NULL)
 
 static struct zmk_ble_profile profiles[ZMK_BLE_PROFILE_COUNT];
 static uint8_t active_profile;
@@ -308,13 +309,13 @@ int zmk_ble_prof_select(uint8_t index) {
 };
 
 int zmk_ble_prof_next(void) {
-    LOG_DBG("select next profile %d",(active_profile+1)%ZMK_BLE_PROFILE_COUNT);
+    LOG_DBG("select next profile %d", (active_profile + 1) % ZMK_BLE_PROFILE_COUNT);
     return zmk_ble_prof_select((active_profile + 1) % ZMK_BLE_PROFILE_COUNT);
 };
 
 int zmk_ble_prof_prev(void) {
-    LOG_DBG("select previous profile %d",(active_profile + ZMK_BLE_PROFILE_COUNT - 1) %
-                               ZMK_BLE_PROFILE_COUNT);
+    LOG_DBG("select previous profile %d",
+            (active_profile + ZMK_BLE_PROFILE_COUNT - 1) % ZMK_BLE_PROFILE_COUNT);
     return zmk_ble_prof_select((active_profile + ZMK_BLE_PROFILE_COUNT - 1) %
                                ZMK_BLE_PROFILE_COUNT);
 };
@@ -433,16 +434,14 @@ static int ble_profiles_handle_set(const char *name, size_t len, settings_read_c
         }
     }
 #if IS_ENABLED(CONFIG_BT_SUPPORT_STATIC_RANDOM_ADDRESS)
-    else if(settings_name_steq(name,"address",&next) && next)
-    {
+    else if (settings_name_steq(name, "address", &next) && next) {
         char *endptr;
         uint8_t idx = strtoul(next, &endptr, 10);
         if (*endptr != '\0') {
             LOG_WRN("Invalid address index: %s", next);
             return -EINVAL;
         }
-        if(len != sizeof(bt_addr_le_t))
-        {
+        if (len != sizeof(bt_addr_le_t)) {
             return -EINVAL;
         }
         if (idx >= ZMK_BLE_PROFILE_COUNT) {
@@ -451,7 +450,7 @@ static int ble_profiles_handle_set(const char *name, size_t len, settings_read_c
             return -EINVAL;
         }
         int err = read_cb(cb_arg, &static_addr[idx], sizeof(bt_addr_le_t));
-        if(err <= 0 ) {
+        if (err <= 0) {
             LOG_ERR("failed to read static address ");
         }
         char addr_str[BT_ADDR_LE_STR_LEN];
@@ -740,8 +739,7 @@ int zmk_ble_init(void) {
     return 0;
 }
 
-int zmk_ble_deinit(void)
-{
+int zmk_ble_deinit(void) {
     bt_disable();
     return 0;
 }
@@ -831,27 +829,24 @@ ZMK_SUBSCRIPTION(zmk_ble, zmk_keycode_state_changed);
 #endif /* IS_ENABLED(CONFIG_ZMK_BLE_PASSKEY_ENTRY) */
 
 #if IS_ENABLED(CONFIG_BT_SUPPORT_STATIC_RANDOM_ADDRESS)
-static void zmk_check_profile_exist_static_random_addr(bool need_gen_new_addr)
-{
+static void zmk_check_profile_exist_static_random_addr(bool need_gen_new_addr) {
     char addr_str[BT_ADDR_LE_STR_LEN];
     bt_addr_le_to_str(&static_addr[active_profile], addr_str, sizeof(addr_str));
 
-    LOG_DBG("Loaded %s address for cur profile %d, need generate new addr(1:true, 0:false): %d", addr_str, active_profile, need_gen_new_addr);
-    if((need_gen_new_addr == true || static_addr[active_profile].type != BT_ADDR_LE_RANDOM ||
-		    !BT_ADDR_IS_STATIC(&static_addr[active_profile].a)))
-    {
+    LOG_DBG("Loaded %s address for cur profile %d, need generate new addr(1:true, 0:false): %d",
+            addr_str, active_profile, need_gen_new_addr);
+    if ((need_gen_new_addr == true || static_addr[active_profile].type != BT_ADDR_LE_RANDOM ||
+         !BT_ADDR_IS_STATIC(&static_addr[active_profile].a))) {
         bt_addr_le_create_static(&static_addr[active_profile]);
         char settings_name[16];
         sprintf(settings_name, "ble/address/%d", active_profile);
         settings_save_one(settings_name, &static_addr[active_profile], sizeof(bt_addr_le_t));
-        LOG_DBG("cur profile %d has not generated static random addr ",active_profile);
+        LOG_DBG("cur profile %d has not generated static random addr ", active_profile);
         memcpy(&bt_dev.id_addr[0], &static_addr[active_profile], sizeof(bt_addr_le_t));
-    }
-    else
-    {
-        LOG_DBG("cur profile %d has generated static random addr ",active_profile);
+    } else {
+        LOG_DBG("cur profile %d has generated static random addr ", active_profile);
         memcpy(&bt_dev.id_addr[0], &static_addr[active_profile], sizeof(bt_addr_le_t));
     }
 }
 #endif
-//SYS_INIT(zmk_ble_init, APPLICATION, CONFIG_ZMK_BLE_INIT_PRIORITY);
+// SYS_INIT(zmk_ble_init, APPLICATION, CONFIG_ZMK_BLE_INIT_PRIORITY);

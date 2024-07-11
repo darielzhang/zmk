@@ -8,13 +8,13 @@
 
 #pragma once
 
-#define GPIO_PIN_LEVEL_LOW   0
+#define GPIO_PIN_LEVEL_LOW 0
 #define GPIO_PIN_LEVEL_HIGH 1
 #define USB_IN_DETECT_NUM 5
 #define USB_OUT_DETECT_NUM 6
 
-#define WINDOWS  0
-#define MACOS    1
+#define WINDOWS 0
+#define MACOS 1
 
 typedef struct APP_MODE {
     bool is_in_bt_mode;

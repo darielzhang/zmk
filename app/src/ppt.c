@@ -32,30 +32,30 @@ static int zmk_ppt_send_report(uint8_t *report, size_t len) {
     // {
     //     DBG_DIRECT("ppt send data:0x%x", report[i]);
     // }
-    int err = ppt_app_send_data(SYNC_MSG_TYPE_INFINITE_RETRANS,0,report,len);
+    int err = ppt_app_send_data(SYNC_MSG_TYPE_INFINITE_RETRANS, 0, report, len);
     return err;
 }
 
 int zmk_ppt_send_keyboard_report(void) {
     size_t len;
     uint8_t *report = get_keyboard_report(&len);
-    DBG_DIRECT("zmk ppt send keyboard data, len is %d",len);
+    DBG_DIRECT("zmk ppt send keyboard data, len is %d", len);
 
     uint8_t opcode = SYNC_OPCODE_KEYBOARD;
-    uint8_t ppt_report[len+1];
+    uint8_t ppt_report[len + 1];
     ppt_report[0] = opcode;
     memcpy(&ppt_report[1], report, len);
-    return zmk_ppt_send_report(ppt_report, (len+1));
+    return zmk_ppt_send_report(ppt_report, (len + 1));
 }
 
 int zmk_ppt_send_consumer_report(void) {
     struct zmk_hid_consumer_report *report = zmk_hid_get_consumer_report();
     uint16_t len = sizeof(*report);
-    DBG_DIRECT("zmk ppt send consumer data, len is %d",len);
+    DBG_DIRECT("zmk ppt send consumer data, len is %d", len);
 
     uint8_t opcode = SYNC_OPCODE_CONSUMER;
-    uint8_t ppt_report[len+1];
+    uint8_t ppt_report[len + 1];
     ppt_report[0] = opcode;
     memcpy(&ppt_report[1], report, len);
-    return zmk_ppt_send_report(ppt_report, (len+1));
+    return zmk_ppt_send_report(ppt_report, (len + 1));
 }

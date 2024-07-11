@@ -67,7 +67,7 @@ bool zmk_endpoint_instance_eq(struct zmk_endpoint_instance a, struct zmk_endpoin
 
     case ZMK_TRANSPORT_PPT:
         return true;
-   }
+    }
 
     LOG_ERR("Invalid transport %d", a.transport);
     return false;
@@ -91,7 +91,7 @@ int zmk_endpoint_instance_to_str(struct zmk_endpoint_instance endpoint, char *st
 
 #define INSTANCE_INDEX_OFFSET_USB 0
 #define INSTANCE_INDEX_OFFSET_BLE ZMK_ENDPOINT_USB_COUNT
-#define INSTANCE_INDEX_OFFSET_PPT (ZMK_ENDPOINT_USB_COUNT+INSTANCE_INDEX_OFFSET_BLE)
+#define INSTANCE_INDEX_OFFSET_PPT (ZMK_ENDPOINT_USB_COUNT + INSTANCE_INDEX_OFFSET_BLE)
 
 int zmk_endpoint_instance_to_index(struct zmk_endpoint_instance endpoint) {
     switch (endpoint.transport) {
@@ -100,7 +100,7 @@ int zmk_endpoint_instance_to_index(struct zmk_endpoint_instance endpoint) {
 
     case ZMK_TRANSPORT_BLE:
         return INSTANCE_INDEX_OFFSET_BLE + endpoint.ble.profile_index;
-    
+
     case ZMK_TRANSPORT_PPT:
         return INSTANCE_INDEX_OFFSET_PPT;
     }
@@ -333,7 +333,8 @@ static bool is_ppt_ready(void) {
 static enum zmk_transport get_selected_transport(void) {
     if (is_ble_ready()) {
         if (is_usb_ready()) {
-            LOG_DBG("Both ble and usb endpoint transports are ready. Using %d", preferred_transport);
+            LOG_DBG("Both ble and usb endpoint transports are ready. Using %d",
+                    preferred_transport);
             return preferred_transport;
         }
 
@@ -342,7 +343,8 @@ static enum zmk_transport get_selected_transport(void) {
     }
     if (is_ppt_ready()) {
         if (is_usb_ready()) {
-            LOG_DBG("Both ppt and usb endpoint transports are ready. Using %d", preferred_transport);
+            LOG_DBG("Both ppt and usb endpoint transports are ready. Using %d",
+                    preferred_transport);
             return preferred_transport;
         }
 
