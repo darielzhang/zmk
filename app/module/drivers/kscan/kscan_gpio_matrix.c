@@ -16,6 +16,8 @@
 #include <zephyr/sys/util.h>
 
 #include <zmk/debounce.h>
+#include <zephyr/dt-bindings/gpio/realtek-rtl87x2g-gpio.h>
+#include "trace.h"
 
 LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 
@@ -113,7 +115,6 @@ static int state_index_io(const struct kscan_matrix_config *config, const int in
                ? state_index_rc(config, output_idx, input_idx)
                : state_index_rc(config, input_idx, output_idx);
 }
-
 static int kscan_matrix_set_all_outputs(const struct device *dev, const int value) {
     const struct kscan_matrix_config *config = dev->config;
 
@@ -187,7 +188,7 @@ static void kscan_matrix_irq_callback_handler(const struct device *port, struct 
     data->scan_time = k_uptime_get();
 
     k_work_reschedule(&data->work, K_NO_WAIT);
-}
+} 
 #endif
 
 static void kscan_matrix_read_continue(const struct device *dev) {
@@ -200,6 +201,7 @@ static void kscan_matrix_read_continue(const struct device *dev) {
 }
 
 static void kscan_matrix_read_end(const struct device *dev) {
+    LOG_DBG("");
 #if USE_INTERRUPTS
     // Return to waiting for an interrupt.
     kscan_matrix_interrupt_enable(dev);
@@ -217,7 +219,7 @@ static void kscan_matrix_read_end(const struct device *dev) {
 static int kscan_matrix_read(const struct device *dev) {
     struct kscan_matrix_data *data = dev->data;
     const struct kscan_matrix_config *config = dev->config;
-
+LOG_DBG("");
     // Scan the matrix.
     for (int i = 0; i < config->outputs.len; i++) {
         const struct kscan_gpio *out_gpio = &config->outputs.gpios[i];
@@ -333,7 +335,7 @@ static int kscan_matrix_init_input_inst(const struct device *dev, const struct k
         return -ENODEV;
     }
 
-    int err = gpio_pin_configure_dt(&gpio->spec, GPIO_INPUT);
+    int err = gpio_pin_configure_dt(&gpio->spec, GPIO_INPUT | GPIO_PULL_DOWN | RTL87X2G_GPIO_INPUT_PM_WAKEUP);
     if (err) {
         LOG_ERR("Unable to configure pin %u on %s for input", gpio->spec.pin,
                 gpio->spec.port->name);
@@ -400,7 +402,6 @@ static int kscan_matrix_init_outputs(const struct device *dev) {
             return err;
         }
     }
-
     return 0;
 }
 
