@@ -41,6 +41,7 @@ static struct gpio_dt_spec bt_led = GPIO_DT_SPEC_GET(DT_NODELABEL(gpio_leds), bl
 static struct gpio_callback zmk_mode_monitor_ppt_cb;
 static struct gpio_callback zmk_mode_monitor_bt_cb;
 static struct gpio_callback zmk_mode_monitor_usb_cb;
+static struct gpio_callback zmk_mode_monitor_win2mac_cb;
 
 static uint8_t usb_in_high_vol_num = 0;
 static uint8_t usb_out_low_vol_num = 0;
@@ -241,8 +242,8 @@ static int zmk_mode_monitor_init(void) {
     }
 
     /* win or mac Mode monitor callback enable and pin config */
-    gpio_init_callback(&zmk_mode_monitor_bt_cb, zmk_mode_monitor_callback, BIT((&win2mac)->pin));
-    rc = gpio_add_callback((&win2mac)->port, &zmk_mode_monitor_bt_cb);
+    gpio_init_callback(&zmk_mode_monitor_win2mac_cb, zmk_mode_monitor_callback, BIT((&win2mac)->pin));
+    rc = gpio_add_callback((&win2mac)->port, &zmk_mode_monitor_win2mac_cb);
     if (rc != 0) {
         LOG_ERR("configure win2mac gpio cb fail, err:%d ", rc);
     }
