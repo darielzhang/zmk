@@ -12,7 +12,7 @@
 #include <zephyr/drivers/adc.h>
 #include <zephyr/drivers/sensor.h>
 #include <zephyr/logging/log.h>
-#include <zmk/leds_pwm_driver.h>
+#include <zmk/leds/leds_pwm_driver.h>
 
 #include "battery_common.h"
 #include "trace.h"

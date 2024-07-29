@@ -10,7 +10,7 @@
 #include <zephyr/kernel.h>
 #include <zephyr/drivers/sensor.h>
 #include <zephyr/drivers/led.h>
-#include <zmk/leds_pwm_driver.h>
+#include <zmk/leds/leds_pwm_driver.h>
 #include <zephyr/drivers/gpio.h>
 
 // LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);

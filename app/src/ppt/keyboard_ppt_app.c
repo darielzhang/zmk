@@ -14,6 +14,7 @@
 #include <zmk/ppt.h>
 #include <zmk/event_manager.h>
 #include <zmk/events/ppt_conn_state_changed.h>
+#include <zmk/leds/leds_gpio_driver.h>
 #include "rtl_pinmux.h"
 #include "trace.h"
 
@@ -114,6 +115,8 @@ void zmk_ppt_sync_event_cb(sync_event_t event) {
 
     case SYNC_EVENT_CONNECTED: {
         DBG_DIRECT("[zmk_ppt_sync_event_cb] SYNC_EVENT_CONNECTED");
+        LED_BLINK_EXIT();
+        LED_ON(LED_PPT);
         ppt_app_global_data.keyboard_ppt_status = KEYBOARD_PPT_STATUS_CONNECTED;
 
 #if FEATURE_SUPPORT_NO_ACTION_DISCONN
@@ -170,6 +173,7 @@ void zmk_ppt_sync_event_cb(sync_event_t event) {
  */
 void keyboard_ppt_pair(void) {
     DBG_DIRECT("keyboard ppt pair");
+    LED_BLINK(LED_PPT, LED_GPIO_PAIR_CNT);
     if (true == ppt_pair()) {
         ppt_app_global_data.keyboard_ppt_status = KEYBOARD_PPT_STATUS_PAIRING;
     }

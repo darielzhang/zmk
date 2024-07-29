@@ -10,7 +10,7 @@
 #include <zephyr/kernel.h>
 #include <zmk/event_manager.h>
 #include <zmk/keys.h>
-#include <zmk/mode_monitor.h>
+#include <zmk/leds/leds_gpio_driver.h>
 
 struct zmk_keycode_state_changed {
     uint16_t usage_page;
@@ -43,18 +43,18 @@ zmk_keycode_state_changed_from_encoded(uint32_t encoded, bool pressed, int64_t t
     }
     if (page == HID_USAGE_KEY) {
         if (id == HID_USAGE_KEY_KEYBOARD_CAPS_LOCK && pressed == 1 && caps_lock_flag == 0) {
-            cap_led_on();
+            LED_ON(LED_CAPSLOCK);
             caps_lock_flag = 1;
         } else if (id == HID_USAGE_KEY_KEYBOARD_CAPS_LOCK && pressed == 1 && caps_lock_flag == 1) {
-            cap_led_off();
+            LED_OFF(LED_CAPSLOCK);
             caps_lock_flag = 0;
         } else if (id == HID_USAGE_KEY_KEYPAD_NUM_LOCK_AND_CLEAR && pressed == 1 &&
                    num_lock_flag == 0) {
-            num_led_on();
+            LED_ON(LED_NUMLOCK);
             num_lock_flag = 1;
         } else if (id == HID_USAGE_KEY_KEYPAD_NUM_LOCK_AND_CLEAR && pressed == 1 &&
                    num_lock_flag == 1) {
-            num_led_off();
+            LED_OFF(LED_NUMLOCK);
             num_lock_flag = 0;
         }
     }

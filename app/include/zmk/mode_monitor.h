@@ -38,11 +38,6 @@ enum app_mode_type {
     USB_MODE,
 };
 
-void cap_led_on(void);
-void cap_led_off(void);
-void num_led_on(void);
-void num_led_off(void);
-
 void keyboard_switch_os(void);
 
 void pm_check_status_before_enter_wfi_or_dlps(void);

@@ -42,6 +42,7 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 #include <zmk/event_manager.h>
 #include <zmk/events/ble_active_profile_changed.h>
 #include <zmk/mode_monitor.h>
+#include <zmk/leds/leds_gpio_driver.h>
 #include "trace.h"
 
 #if IS_ENABLED(CONFIG_ZMK_BLE_PASSKEY_ENTRY)
@@ -199,6 +200,8 @@ int update_advertising(void) {
     switch (desired_adv + CURR_ADV(advertising_status)) {
     case ZMK_ADV_NONE + CURR_ADV(ZMK_ADV_DIR):
     case ZMK_ADV_NONE + CURR_ADV(ZMK_ADV_CONN):
+        LED_BLINK_EXIT();
+        LED_ON(LED_BT);
         CHECKED_ADV_STOP();
         break;
     case ZMK_ADV_DIR + CURR_ADV(ZMK_ADV_DIR):
@@ -214,6 +217,7 @@ int update_advertising(void) {
         CHECKED_OPEN_ADV();
         break;
     case ZMK_ADV_CONN + CURR_ADV(ZMK_ADV_NONE):
+        LED_BLINK(LED_BT, LED_GPIO_PAIR_CNT);
         CHECKED_OPEN_ADV();
         break;
     }
