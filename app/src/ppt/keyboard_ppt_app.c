@@ -110,6 +110,8 @@ void zmk_ppt_sync_event_cb(sync_event_t event) {
         } else {
             ppt_app_global_data.pair_time_count = 0;
             ppt_app_global_data.keyboard_ppt_status = KEYBOARD_PPT_STATUS_IDLE;
+            LED_BLINK_EXIT();
+            LED_ON(LED_PPT);
         }
     } break;
 

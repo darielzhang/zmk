@@ -217,7 +217,9 @@ int update_advertising(void) {
         CHECKED_OPEN_ADV();
         break;
     case ZMK_ADV_CONN + CURR_ADV(ZMK_ADV_NONE):
-        LED_BLINK(LED_BT, LED_GPIO_PAIR_CNT);
+        if(app_mode.is_in_bt_mode && !app_mode.is_in_usb_mode) {
+            LED_BLINK(LED_BT, LED_GPIO_PAIR_CNT);
+        }
         CHECKED_OPEN_ADV();
         break;
     }
@@ -518,6 +520,8 @@ static void connected(struct bt_conn *conn, uint8_t err) {
 
     if (is_conn_active_profile(conn)) {
         LOG_DBG("Active profile connected");
+        LED_BLINK_EXIT();
+        LED_ON(LED_BT);
         k_work_submit(&raise_profile_changed_event_work);
     }
 }

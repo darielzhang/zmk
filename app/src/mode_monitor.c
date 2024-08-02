@@ -165,11 +165,18 @@ static void zmk_mode_monitor_handler(struct k_work *item) {
             }
         } else if (ev.app_cur_mode == PPT_MODE) {
             if (ev.state_changed == 1) {
-#if IS_ENABLED(CONFIG_ZMK_PPT)
-                zmk_ppt_init();
-#endif
+                if (app_mode.is_in_usb_mode && app_global_data.is_usb_enumeration_success) {
+                    return;
+                } else {
+                    LOG_DBG("[zmk_mode_monitor_handler]:reset to enter ppt mode");
+                    app_system_reset(WDT_FLAG_RESET_SOC);
+                }
             } else {
-                return;
+                if (app_mode.is_in_usb_mode && app_global_data.is_usb_enumeration_success) {
+                        return;
+                    }
+                    LOG_DBG("[zmk_mode_monitor_handler]: exit ppt mode");
+                    app_system_reset(WDT_FLAG_RESET_SOC);
             }
         }
     }
@@ -262,6 +269,7 @@ static void usb_mode_monitor_debounce_timeout_cb(struct k_timer *timer) {
     int usb_pin_polarity_status = gpio_pin_get_raw(detect_usb.port, detect_usb.pin);
 
     if (is_usb_in_debonce_check) {
+        LED_BLINK_EXIT();
         app_global_data.is_app_enabled_dlps = false;
         if (usb_pin_polarity_status == GPIO_PIN_LEVEL_HIGH) {
             LOG_DBG("[usb_mode_monitor_debounce_timeout_cb]: usb_in_high_vol is %d",

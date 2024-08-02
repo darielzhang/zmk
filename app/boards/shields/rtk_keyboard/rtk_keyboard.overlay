@@ -49,13 +49,18 @@
 };
 
 &corewdt {
+    status = "disabled";
+    initial-timeout-ms = <5000>;
+};
+
+&aonwdt {
     status = "okay";
     initial-timeout-ms = <5000>;
 };
 
 / {
     aliases {
-        watchdog = &corewdt;
+        watchdog = &aonwdt;
     };
 };
 
