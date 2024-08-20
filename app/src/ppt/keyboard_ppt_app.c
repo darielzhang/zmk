@@ -215,7 +215,7 @@ void keyboard_ppt_stop_sync(void) {
  * @retval void
  */
 void keyboard_ppt_set_sync_interval(void) {
-    uint32_t ppt_interval_time_us = PPT_REPORT_RATE_LEVEL_0;
+    uint32_t ppt_interval_time_us = PPT_REPORT_RATE_LEVEL_2;
     sync_time_set(SYNC_TIME_PARAM_CONNECT_INTERVAL, ppt_interval_time_us);
     sync_time_set(SYNC_TIME_PARAM_CONNECT_INTERVAL_HIGH, ppt_interval_time_us);
 }

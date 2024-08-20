@@ -296,3 +296,6 @@ zmk_hid_boot_report_t *zmk_hid_get_boot_report();
 #if IS_ENABLED(CONFIG_ZMK_MOUSE)
 struct zmk_hid_mouse_report *zmk_hid_get_mouse_report();
 #endif // IS_ENABLED(CONFIG_ZMK_MOUSE)
+
+int hid_listener_keycode_pressed(const struct zmk_keycode_state_changed *ev);
+int hid_listener_keycode_released(const struct zmk_keycode_state_changed *ev);

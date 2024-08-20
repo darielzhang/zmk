@@ -59,3 +59,21 @@ int zmk_ppt_send_consumer_report(void) {
     memcpy(&ppt_report[1], report, len);
     return zmk_ppt_send_report(ppt_report, (len + 1));
 }
+
+void zmk_rtk_ppt_key_handler(uint32_t row, uint32_t column, bool pressed) {
+    int32_t position = zmk_matrix_transform_row_column_to_position(row, column);
+
+    if (position < 0) {
+        LOG_WRN("Not found in transform: row: %d, col: %d, pressed: %s", row, column,
+                (pressed ? "true" : "false"));
+    }
+
+    // LOG_DBG("Row: %d, col: %d, position: %d, pressed: %s", row, column, position,
+    //         (pressed ? "true" : "false"));
+
+    struct zmk_position_state_changed zmk_position = {.source = ZMK_POSITION_STATE_CHANGE_SOURCE_LOCAL,
+                                                    .state = pressed,
+                                                    .position = position,
+                                                    .timestamp = k_uptime_get()};
+    zmk_keymap_position_state_changed(zmk_position.source, zmk_position.position, zmk_position.state, zmk_position.timestamp);
+}
