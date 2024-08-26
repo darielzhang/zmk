@@ -40,6 +40,7 @@ static int app_wdt_init(void) {
 
 static void app_wdt_timeout_cb(struct k_timer *timer) {
     // DBG_DIRECT("watchdog feed");
+    LOG_ERR("aon wdg feed");
     wdt_feed(wdt, 0);
     return;
 }

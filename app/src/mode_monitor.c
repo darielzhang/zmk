@@ -143,14 +143,14 @@ static void zmk_mode_monitor_handler(struct k_work *item) {
                     return;
                 } else {
                     LOG_DBG("[zmk_mode_monitor_handler]:reset to enter bt mode");
-                    app_system_reset(WDT_FLAG_RESET_SOC);
+                    //app_system_reset(WDT_FLAG_RESET_SOC);
                 }
             } else {
                 if (app_mode.is_in_usb_mode && app_global_data.is_usb_enumeration_success) {
                     return;
                 }
                 LOG_DBG("[zmk_mode_monitor_handler]: exit bt mode");
-                app_system_reset(WDT_FLAG_RESET_SOC);
+                //app_system_reset(WDT_FLAG_RESET_SOC);
             }
         } else if (ev.app_cur_mode == USB_MODE) {
             if (ev.state_changed == 1) {
@@ -160,7 +160,7 @@ static void zmk_mode_monitor_handler(struct k_work *item) {
                 if (app_mode.is_in_bt_mode || app_mode.is_in_ppt_mode) {
                     LOG_DBG(
                         "[zmk_mode_monitor_handler]:reset to exit usb and enter bt or ppt mode");
-                    app_system_reset(WDT_FLAG_RESET_SOC);
+                    //app_system_reset(WDT_FLAG_RESET_SOC);
                 }
             }
         } else if (ev.app_cur_mode == PPT_MODE) {
@@ -169,14 +169,14 @@ static void zmk_mode_monitor_handler(struct k_work *item) {
                     return;
                 } else {
                     LOG_DBG("[zmk_mode_monitor_handler]:reset to enter ppt mode");
-                    app_system_reset(WDT_FLAG_RESET_SOC);
+                    //app_system_reset(WDT_FLAG_RESET_SOC);
                 }
             } else {
                 if (app_mode.is_in_usb_mode && app_global_data.is_usb_enumeration_success) {
                         return;
                     }
                     LOG_DBG("[zmk_mode_monitor_handler]: exit ppt mode");
-                    app_system_reset(WDT_FLAG_RESET_SOC);
+                    //app_system_reset(WDT_FLAG_RESET_SOC);
             }
         }
     }
@@ -371,4 +371,4 @@ void pm_no_check_status_before_enter_wfi(void) {
 }
 #endif
 
-SYS_INIT(zmk_mode_monitor_init, APPLICATION, CONFIG_APPLICATION_INIT_PRIORITY);
+// SYS_INIT(zmk_mode_monitor_init, APPLICATION, CONFIG_APPLICATION_INIT_PRIORITY);

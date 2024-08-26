@@ -153,7 +153,7 @@ K_TIMER_DEFINE(activity_timer, activity_expiry_function, NULL);
 static int activity_init(void) {
     activity_last_uptime = k_uptime_get();
 
-    k_timer_start(&activity_timer, K_SECONDS(1), K_SECONDS(1));
+    //k_timer_start(&activity_timer, K_SECONDS(1), K_SECONDS(1));
     return 0;
 }
 

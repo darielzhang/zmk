@@ -74,7 +74,7 @@ static void leds_gpio_driver_init(void) {
     gpio_pin_configure_dt(&leds_pwron, GPIO_OUTPUT_LOW);
 
     for(uint8_t i = 0; i < LEDS_GPIO_NUM; i++) {
-        gpio_pin_configure_dt(&(leds_gpio[i]), GPIO_OUTPUT_HIGH);
+        //gpio_pin_configure_dt(&(leds_gpio[i]), GPIO_OUTPUT_HIGH);
     }
 }
 
