@@ -35,12 +35,9 @@ void led_blink_start(uint8_t led_index, int cnt) {
     gpio_leds_global_data.blink_cnt = cnt;
 
     k_timer_start(&leds_gpio_ctrl_timer, K_MSEC(LED_GPIO_BLINK_MS), K_MSEC(LED_GPIO_BLINK_MS));
-
 }
 
-void led_blink_exit(void) {
-    k_timer_stop(&leds_gpio_ctrl_timer);
-}
+void led_blink_exit(void) { k_timer_stop(&leds_gpio_ctrl_timer); }
 
 void gpio_led_on(uint8_t led_index) {
     gpio_pin_set(leds_gpio[led_index].port, leds_gpio[led_index].pin, 0);

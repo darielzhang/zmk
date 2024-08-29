@@ -72,7 +72,7 @@ void zmk_rtk_ppt_key_handler(uint32_t row, uint32_t column, bool pressed) {
     // LOG_DBG("Row: %d, col: %d, position: %d, pressed: %s", row, column, position,
     //         (pressed ? "true" : "false"));
 
-    struct zmk_position_state_changed zmk_position = {.source = 
+	struct zmk_position_state_changed zmk_position = {.source = 
                                                           ZMK_POSITION_STATE_CHANGE_SOURCE_LOCAL,
                                                       .state = pressed,
                                                       .position = position,

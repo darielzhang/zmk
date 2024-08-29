@@ -10,6 +10,7 @@
 #include <zephyr/logging/log.h>
 
 #include <zmk/ppt/keyboard_ppt_app.h>
+#include <ppt_sync_master.h>
 #include <zmk/mode_monitor.h>
 #include <zmk/ppt.h>
 #include <zmk/event_manager.h>
