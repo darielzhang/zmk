@@ -30,6 +30,7 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 // TODO: Tweak this to smarter runtime PM of subsystems on sleep.
 
 #ifdef CONFIG_PM_DEVICE
+#if IS_ENABLED(CONFIG_PM_POLICY_CUSTOM)
 TYPE_SECTION_START_EXTERN(const struct device *, zmk_pm_device_slots);
 
 #if !defined(CONFIG_PM_DEVICE_RUNTIME_EXCLUSIVE)
@@ -81,6 +82,7 @@ static void zmk_pm_resume_devices(void) {
     zmk_num_susp = 0;
 }
 #endif /* !CONFIG_PM_DEVICE_RUNTIME_EXCLUSIVE */
+#endif /* CONFIG_PM_POLICY_CUSTOM */
 #endif /* CONFIG_PM_DEVICE */
 
 bool is_usb_power_present(void) {

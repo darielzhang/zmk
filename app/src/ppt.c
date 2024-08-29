@@ -60,6 +60,7 @@ int zmk_ppt_send_consumer_report(void) {
     return zmk_ppt_send_report(ppt_report, (len + 1));
 }
 
+#if FEATURE_SUPPORT_2_4G_FAST_KEYSTROKE_PROCESS
 void zmk_rtk_ppt_key_handler(uint32_t row, uint32_t column, bool pressed) {
     int32_t position = zmk_matrix_transform_row_column_to_position(row, column);
 
@@ -71,9 +72,12 @@ void zmk_rtk_ppt_key_handler(uint32_t row, uint32_t column, bool pressed) {
     // LOG_DBG("Row: %d, col: %d, position: %d, pressed: %s", row, column, position,
     //         (pressed ? "true" : "false"));
 
-    struct zmk_position_state_changed zmk_position = {.source = ZMK_POSITION_STATE_CHANGE_SOURCE_LOCAL,
-                                                    .state = pressed,
-                                                    .position = position,
-                                                    .timestamp = k_uptime_get()};
-    zmk_keymap_position_state_changed(zmk_position.source, zmk_position.position, zmk_position.state, zmk_position.timestamp);
+    struct zmk_position_state_changed zmk_position = {.source = 
+                                                          ZMK_POSITION_STATE_CHANGE_SOURCE_LOCAL,
+                                                      .state = pressed,
+                                                      .position = position,
+                                                      .timestamp = k_uptime_get()};
+    zmk_keymap_position_state_changed(zmk_position.source, zmk_position.position,
+                                      zmk_position.state, zmk_position.timestamp);
 }
+#endif

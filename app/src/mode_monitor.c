@@ -173,10 +173,10 @@ static void zmk_mode_monitor_handler(struct k_work *item) {
                 }
             } else {
                 if (app_mode.is_in_usb_mode && app_global_data.is_usb_enumeration_success) {
-                        return;
-                    }
-                    LOG_DBG("[zmk_mode_monitor_handler]: exit ppt mode");
-                    app_system_reset(WDT_FLAG_RESET_SOC);
+                    return;
+                }
+                LOG_DBG("[zmk_mode_monitor_handler]: exit ppt mode");
+                app_system_reset(WDT_FLAG_RESET_SOC);
             }
         }
     }

@@ -217,7 +217,7 @@ int update_advertising(void) {
         CHECKED_OPEN_ADV();
         break;
     case ZMK_ADV_CONN + CURR_ADV(ZMK_ADV_NONE):
-        if(app_mode.is_in_bt_mode && !app_mode.is_in_usb_mode) {
+        if (app_mode.is_in_bt_mode && !app_mode.is_in_usb_mode) {
             LED_BLINK(LED_BT, LED_GPIO_PAIR_CNT);
         }
         CHECKED_OPEN_ADV();

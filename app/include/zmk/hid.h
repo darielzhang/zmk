@@ -8,6 +8,7 @@
 
 #include <zephyr/usb/usb_device.h>
 #include <zephyr/usb/class/usb_hid.h>
+#include <zmk/events/keycode_state_changed.h>
 
 #include <zmk/keys.h>
 #if IS_ENABLED(CONFIG_ZMK_MOUSE)

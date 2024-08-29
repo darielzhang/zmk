@@ -62,14 +62,14 @@ static void zmk_kscan_callback(const struct device *dev, uint32_t row, uint32_t 
         .column = column,
         .state = (pressed ? ZMK_KSCAN_EVENT_STATE_PRESSED : ZMK_KSCAN_EVENT_STATE_RELEASED)};
 
-    if(zmk_ppt_is_ready()) {
+    if (zmk_ppt_is_ready()) {
 #if FEATURE_SUPPORT_2_4G_FAST_KEYSTROKE_PROCESS
         zmk_rtk_ppt_key_handler(row, column, pressed);
         return;
 #endif
     }
-        k_msgq_put(&zmk_kscan_msgq, &ev, K_NO_WAIT);
-        k_work_submit(&msg_processor.work);
+    k_msgq_put(&zmk_kscan_msgq, &ev, K_NO_WAIT);
+    k_work_submit(&msg_processor.work);
 }
 
 void zmk_kscan_process_msgq(struct k_work *item) {
