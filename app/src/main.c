@@ -17,7 +17,12 @@ LOG_MODULE_REGISTER(zmk, CONFIG_ZMK_LOG_LEVEL);
 #include <zmk/display.h>
 #include <zmk/mode_monitor.h>
 #include <zmk/ble.h>
+#include <zmk/board.h>
+#include <zmk/app_wdt.h>
 #include <drivers/ext_power.h>
+#include <zephyr/sys/reboot.h>
+#include "reset_reason.h"
+#include "aon_reg.h"
 #include "trace.h"
 #if IS_ENABLED(CONFIG_ZMK_PPT)
 #include <zmk/ppt/keyboard_ppt_app.h>
@@ -40,24 +45,50 @@ int main(void) {
 #if CONFIG_PM
     app_dlps_check_cb_register();
 #endif
-
-    if (zmk_kscan_init(DEVICE_DT_GET(ZMK_MATRIX_NODE_ID)) != 0) {
-        return -ENOTSUP;
+	AON_NS_REG0X_APP_TYPE aon_0x1ae0 = {.d32 = AON_REG_READ(AON_NS_REG0X_APP)};
+	uint32_t sw_reset_type = aon_0x1ae0.reset_reason;
+    if(sw_reset_type == SWITCH_TO_TEST_MODE) {
+        app_mode.is_in_single_test_mode = true;
+#if (MP_TEST_SINGLE_TONE_MODE == GAP_LAYER_SINGLE_TONE_INTERFACE)
+    LOG_INF("GAP_SINGLE_TONE_MODE");
+    //not currently supported
+    if(app_global_data.is_watchdog_enable) {
+        app_watchdog_close();  /* Avoid unexpected reboot */
     }
-    DBG_DIRECT("app global mode usb %d ppt%d ble%d", app_mode.is_in_usb_mode,
-               app_mode.is_in_ppt_mode, app_mode.is_in_bt_mode);
-    if (app_mode.is_in_bt_mode && !app_mode.is_in_usb_mode) {
-        zmk_ble_init();
+#elif MP_TEST_SINGLE_TONE_MODE == HCI_LAYER_SINGLE_TONE_INTERFACE
+    LOG_INF("HCI_SINGLE_TONE_MODE");
+    if(app_global_data.is_watchdog_enable) {
+        app_watchdog_close();  /* Avoid unexpected reboot */
     }
+    single_tone_init();
+#endif //MP_TEST_SINGLE_TONE_MODE
+    }
+    else {
+        if (zmk_kscan_init(DEVICE_DT_GET(ZMK_MATRIX_NODE_ID)) != 0) {
+            return -ENOTSUP;
+        }
+        DBG_DIRECT("app global mode usb %d ppt%d ble%d", app_mode.is_in_usb_mode,
+                app_mode.is_in_ppt_mode, app_mode.is_in_bt_mode);
+        if (app_mode.is_in_bt_mode && !app_mode.is_in_usb_mode) {
+            zmk_ble_init();
+        }
 #if IS_ENABLED(CONFIG_ZMK_PPT)
-    if (app_mode.is_in_ppt_mode && !app_mode.is_in_usb_mode) {
-        zmk_ppt_init();
-    }
+        if (app_mode.is_in_ppt_mode && !app_mode.is_in_usb_mode) {
+            zmk_ppt_init();
+        }
+#endif
+
+#if (THE_WAY_TO_ENTER_MP_TEST_MODE == ENTER_MP_TEST_MODE_BY_GPIO_TRIGGER)
+        bool mode_type = mp_test_mode_check_and_enter();
+        if (mode_type) {
+            LOG_DBG("reboot to switch to test mode");
+            sys_reboot(SWITCH_TO_TEST_MODE);
+        }
 #endif
 
 #ifdef CONFIG_ZMK_DISPLAY
-    zmk_display_init();
+        zmk_display_init();
 #endif /* CONFIG_ZMK_DISPLAY */
-
+    }
     return 0;
 }

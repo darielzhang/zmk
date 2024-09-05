@@ -10,6 +10,7 @@
 #include <zephyr/sys/util.h>
 #include <zephyr/drivers/watchdog.h>
 #include <zephyr/settings/settings.h>
+#include <zmk/mode_monitor.h>
 #include <zmk/app_wdt.h>
 
 #include <zephyr/logging/log.h>
@@ -35,6 +36,7 @@ static int app_wdt_init(void) {
         return 1;
     }
     k_timer_start(&app_wdt_timer, K_MSEC(4000), K_MSEC(4000));
+    app_global_data.is_watchdog_enable = true;
     return 0;
 }
 
@@ -42,6 +44,10 @@ static void app_wdt_timeout_cb(struct k_timer *timer) {
     // DBG_DIRECT("watchdog feed");
     wdt_feed(wdt, 0);
     return;
+}
+
+void app_watchdog_close(void) {
+    wdt_disable(wdt);
 }
 
 SYS_INIT(app_wdt_init, APPLICATION, CONFIG_APPLICATION_INIT_PRIORITY);

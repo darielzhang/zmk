@@ -25,3 +25,7 @@ properties:
   win2mac-gpios:
     type: phandle-array
     required: true
+  
+  mptest-gpios:
+    type: phandle-array
+    required: true

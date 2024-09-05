@@ -9,3 +9,4 @@
 #include <stdint.h>
 
 void app_system_reset(uint8_t flag);
+void app_watchdog_close(void);
