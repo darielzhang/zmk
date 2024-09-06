@@ -16,3 +16,5 @@
 #endif
 
 #endif
+
+bool mp_test_mode_check_and_enter(void);

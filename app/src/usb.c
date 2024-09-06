@@ -81,14 +81,14 @@ int zmk_usb_init(void) {
     int usb_disable_ret;
 
     usb_enable_ret = usb_enable(usb_status_cb);
-    // if (!gpio_pin_get_raw(detect_usb.port, detect_usb.pin)) {
-    //     LOG_DBG("usb is not insert");
-    //     usb_disable_ret = usb_disable();
-    //     if (usb_disable_ret != 0) {
-    //         LOG_ERR("Unable to disable usb ,err = %d", usb_disable_ret);
-    //         return -EINVAL;
-    //     }
-    // }
+    if (!gpio_pin_get_raw(detect_usb.port, detect_usb.pin)) {
+        LOG_DBG("usb is not insert");
+        usb_disable_ret = usb_disable();
+        if (usb_disable_ret != 0) {
+            LOG_ERR("Unable to disable usb ,err = %d", usb_disable_ret);
+            return -EINVAL;
+        }
+    }
 
     if (usb_enable_ret != 0) {
         LOG_ERR("Unable to enable USB ,err = %d", usb_enable_ret);

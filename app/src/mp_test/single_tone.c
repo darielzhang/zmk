@@ -198,8 +198,7 @@ bool single_tone_handle_hci_cb(T_SINGLE_TONE_EVT evt, bool status, uint8_t *p_bu
 void single_tone_task(void *p_param)
 {
     k_sleep(K_MSEC(100));
-    vhci_open(single_tone_handle_hci_cb);
-
+    vhci_open((P_HCI_IF_CALLBACK)single_tone_handle_hci_cb);
     while (1)
     {
         k_sleep(K_MSEC(1000));

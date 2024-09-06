@@ -34,7 +34,6 @@ typedef struct
 
 //extern TimerHandle_t single_tone_timer;
 
-
 typedef bool (*P_SINGLE_TONE_CALLBACK)(T_SINGLE_TONE_EVT evt, bool status, uint8_t *p_buf,
                                        uint32_t len);
 
