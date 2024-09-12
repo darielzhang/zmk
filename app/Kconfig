@@ -128,6 +128,10 @@ config ZMK_USB_BOOT
     select USB_HID_BOOT_PROTOCOL
     select USB_DEVICE_SOF
 
+config USB_CDC_FOR_RF_TEST
+    bool "use usb cdc to test rf measurements"
+    default n
+
 if ZMK_USB
 
 config USB_NUMOF_EP_WRITE_RETRIES

@@ -20,7 +20,6 @@
     /* These aliases are provided for compatibility with samples */
     aliases {
     };
-
 };
 
 &flash {
@@ -79,4 +78,9 @@
     parity = "none";
     stop-bits = "1";
     data-bits = <8>;
+};
+
+zephyr_udc0: &usb {
+    compatible = "realtek,rtl87x2g-usb";
+    status = "okay";
 };

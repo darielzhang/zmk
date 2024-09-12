@@ -80,3 +80,8 @@
     stop-bits = "1";
     data-bits = <8>;
 };
+
+zephyr_udc0: &usb {
+    compatible = "realtek,rtl87x2g-usb";
+    status = "okay";
+};

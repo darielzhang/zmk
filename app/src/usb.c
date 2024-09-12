@@ -79,7 +79,6 @@ void usb_status_cb(enum usb_dc_status_code status, const uint8_t *params) {
 int zmk_usb_init(void) {
     int usb_enable_ret;
     int usb_disable_ret;
-
     usb_enable_ret = usb_enable(usb_status_cb);
     if (!gpio_pin_get_raw(detect_usb.port, detect_usb.pin)) {
         LOG_DBG("usb is not insert");

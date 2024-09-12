@@ -15,21 +15,21 @@
 #define FEATURE_SUPPORT_2_4G_FAST_KEYSTROKE_PROCESS 0
 
 /**
-* MP test config
-*/
-#define FEATURE_SUPPORT_MP_TEST_MODE            1  /* set 1 to support mp test mode */
+ * MP test config
+ */
+#define FEATURE_SUPPORT_MP_TEST_MODE 1  /* set 1 to support mp test mode */
 
 #if FEATURE_SUPPORT_MP_TEST_MODE
-#define GAP_LAYER_SINGLE_TONE_INTERFACE         0   /* use gap layer api to send single tone */
-#define HCI_LAYER_SINGLE_TONE_INTERFACE         1   /* use HCI api to send single tone */
-#define MP_TEST_SINGLE_TONE_MODE                HCI_LAYER_SINGLE_TONE_INTERFACE
+#define GAP_LAYER_SINGLE_TONE_INTERFACE 0   /* use gap layer api to send single tone */
+#define HCI_LAYER_SINGLE_TONE_INTERFACE 1   /* use HCI api to send single tone */
+#define MP_TEST_SINGLE_TONE_MODE HCI_LAYER_SINGLE_TONE_INTERFACE
 
-#define ENTER_MP_TEST_MODE_BY_GPIO_TRIGGER      0
-#define ENTER_MP_TEST_MODE_BY_USB_CMD           1
+#define ENTER_MP_TEST_MODE_BY_GPIO_TRIGGER 0
+#define ENTER_MP_TEST_MODE_BY_USB_CMD 1
 #endif
 
 #if (MP_TEST_SINGLE_TONE_MODE == GAP_LAYER_SINGLE_TONE_INTERFACE)
-#define THE_WAY_TO_ENTER_MP_TEST_MODE           ENTER_MP_TEST_MODE_BY_USB_CMD
+#define THE_WAY_TO_ENTER_MP_TEST_MODE ENTER_MP_TEST_MODE_BY_USB_CMD
 #elif (MP_TEST_SINGLE_TONE_MODE == HCI_LAYER_SINGLE_TONE_INTERFACE)
-#define THE_WAY_TO_ENTER_MP_TEST_MODE           ENTER_MP_TEST_MODE_BY_GPIO_TRIGGER
+#define THE_WAY_TO_ENTER_MP_TEST_MODE ENTER_MP_TEST_MODE_BY_GPIO_TRIGGER
 #endif

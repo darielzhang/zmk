@@ -11,8 +11,8 @@
  *                              Macros
  *============================================================================*/
 #if (THE_WAY_TO_ENTER_MP_TEST_MODE == ENTER_MP_TEST_MODE_BY_GPIO_TRIGGER)
-#define MP_TEST_PIN_1                               P2_3
-#define MP_TEST_PIN_2                               P2_4
+#define MP_TEST_PIN_1 P2_3
+#define MP_TEST_PIN_2 P2_4
 #endif
 
 #endif

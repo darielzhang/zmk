@@ -47,28 +47,27 @@ int main(void) {
 #endif
 	AON_NS_REG0X_APP_TYPE aon_0x1ae0 = {.d32 = AON_REG_READ(AON_NS_REG0X_APP)};
 	uint32_t sw_reset_type = aon_0x1ae0.reset_reason;
-    if(sw_reset_type == SWITCH_TO_TEST_MODE) {
+    if (sw_reset_type == SWITCH_TO_TEST_MODE) {
         app_mode.is_in_single_test_mode = true;
 #if (MP_TEST_SINGLE_TONE_MODE == GAP_LAYER_SINGLE_TONE_INTERFACE)
-    LOG_INF("GAP_SINGLE_TONE_MODE");
-    //not currently supported
-    if(app_global_data.is_watchdog_enable) {
-        app_watchdog_close();  /* Avoid unexpected reboot */
-    }
+        LOG_INF("GAP_SINGLE_TONE_MODE");
+        // not currently supported
+        if (app_global_data.is_watchdog_enable) {
+            app_watchdog_close();  /* Avoid unexpected reboot */
+        }
 #elif MP_TEST_SINGLE_TONE_MODE == HCI_LAYER_SINGLE_TONE_INTERFACE
-    LOG_INF("HCI_SINGLE_TONE_MODE");
-    if(app_global_data.is_watchdog_enable) {
-        app_watchdog_close();  /* Avoid unexpected reboot */
-    }
-    single_tone_init();
-#endif //MP_TEST_SINGLE_TONE_MODE
-    }
-    else {
+        LOG_INF("HCI_SINGLE_TONE_MODE");
+        if (app_global_data.is_watchdog_enable) {
+            app_watchdog_close();  /* Avoid unexpected reboot */
+        }
+        single_tone_init();
+#endif // MP_TEST_SINGLE_TONE_MODE
+    } else {
         if (zmk_kscan_init(DEVICE_DT_GET(ZMK_MATRIX_NODE_ID)) != 0) {
             return -ENOTSUP;
         }
         DBG_DIRECT("app global mode usb %d ppt%d ble%d", app_mode.is_in_usb_mode,
-                app_mode.is_in_ppt_mode, app_mode.is_in_bt_mode);
+                    app_mode.is_in_ppt_mode, app_mode.is_in_bt_mode);
         if (app_mode.is_in_bt_mode && !app_mode.is_in_usb_mode) {
             zmk_ble_init();
         }

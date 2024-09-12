@@ -46,8 +46,6 @@ static void app_wdt_timeout_cb(struct k_timer *timer) {
     return;
 }
 
-void app_watchdog_close(void) {
-    wdt_disable(wdt);
-}
+void app_watchdog_close(void) { wdt_disable(wdt); }
 
 SYS_INIT(app_wdt_init, APPLICATION, CONFIG_APPLICATION_INIT_PRIORITY);
