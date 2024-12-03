@@ -88,7 +88,7 @@
     #address-cells = <1>;
     #size-cells = <0>;
     status = "okay";
-    is-bypass-mode;
+    is-bypass-mode = <0x4>;
     channel@2 {
         reg = <2>;
         zephyr,gain = "ADC_GAIN_1";

@@ -98,11 +98,11 @@ int zmk_usb_init(void) {
     return 0;
 }
 int zmk_usb_deinit(void) {
-    int usb_enable_ret;
+    int usb_disable_ret;
 
-    usb_enable_ret = usb_disable();
+    usb_disable_ret = usb_disable();
 
-    if (usb_enable_ret != 0) {
+    if (usb_disable_ret != 0) {
         LOG_ERR("Unable to disable USB");
         return -EINVAL;
     }
